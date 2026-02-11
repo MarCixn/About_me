@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarCixn - Automatyka | Embedded | Web</title>
+    <meta name="description" content="Kompleksowe rozwiązania techniczne - sterowniki maszyn, programowanie robotów przemysłowych, aplikacje webowe, regeneracja baterii.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a2e;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2a2a3a;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 70%);
+        }
+
+        .grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(59, 130, 246, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50px;
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+
+        .hero-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .hero-tag {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .hero-tag:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .hero-tag svg {
+            width: 18px;
+            height: 18px;
+            color: var(--accent);
+        }
+
+        .tag-hint {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: var(--text-muted);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .hero-tag:hover .tag-hint {
+            opacity: 1;
+        }
+
+        /* Tag Info Modal */
+        .tag-info-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .tag-info-overlay.active {
+            display: flex;
+        }
+
+        .tag-info-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .tag-info-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .tag-info-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .tag-info-content {
+            padding: 32px;
+        }
+
+        .tag-info-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tag-info-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tag-info-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent);
+        }
+
+        .tag-info-title h3 {
+            font-size: 1.25rem;
+            margin-bottom: 4px;
+        }
+
+        .tag-info-title p {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .tag-info-section {
+            margin-bottom: 24px;
+        }
+
+        .tag-info-section h4 {
+            font-size: 14px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .tag-info-section p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .example-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .example-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .example-list li svg {
+            width: 20px;
+            height: 20px;
+            color: var(--success);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .example-list li strong {
+            color: var(--text-primary);
+        }
+
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px var(--accent-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-muted);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* ==================== SERVICES SECTION ==================== */
+        .section {
+            padding: 100px 20px;
+        }
+
+        .section-dark {
+            background: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(1.75rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--success));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .service-icon svg {
+            width: 28px;
+            height: 28px;
+            color: var(--accent);
+        }
+
+        .service-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .service-tag {
+            font-size: 11px;
+            padding: 4px 10px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* ==================== TECH STACK ==================== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+        }
+
+        .tech-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .tech-item svg {
+            width: 32px;
+            height: 32px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .tech-item span {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* ==================== PROJECTS ==================== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .project-image svg {
+            width: 64px;
+            height: 64px;
+            color: var(--text-muted);
+        }
+
+        .project-content {
+            padding: 24px;
+        }
+
+        .project-content h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .project-content p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* ==================== CONTACT ==================== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: var(--accent);
+        }
+
+        .contact-card svg {
+            width: 40px;
+            height: 40px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+
+        .contact-card h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .contact-card a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .contact-card a:hover {
+            color: var(--accent);
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* ==================== 3D CUBE ANIMATION ==================== */
+        .cube-container {
+            perspective: 800px;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 40px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 15s infinite linear;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            backdrop-filter: blur(5px);
+        }
+
+        .cube-face svg {
+            width: 40px;
+            height: 40px;
+            color: var(--accent);
+        }
+
+        .front  { transform: rotateY(0deg) translateZ(60px); }
+        .back   { transform: rotateY(180deg) translateZ(60px); }
+        .right  { transform: rotateY(90deg) translateZ(60px); }
+        .left   { transform: rotateY(-90deg) translateZ(60px); }
+        .top    { transform: rotateX(90deg) translateZ(60px); }
+        .bottom { transform: rotateX(-90deg) translateZ(60px); }
+
+        @keyframes rotateCube {
+            0% { transform: rotateX(-20deg) rotateY(0deg); }
+            100% { transform: rotateX(-20deg) rotateY(360deg); }
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .hero-tags {
+                gap: 8px;
+            }
+            .hero-tag {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+            .services-grid, .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .section {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="grid-overlay"></div>
+
+        <div class="hero-content">
+            <div class="cube-container">
+                <div class="cube">
+                    <div class="cube-face front">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+                        </svg>
+                    </div>
+                    <div class="cube-face back">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="cube-face right">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                    </div>
+                    <div class="cube-face left">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
+                        </svg>
+                    </div>
+                    <div class="cube-face top">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <div class="cube-face bottom">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <span class="hero-badge">Dostepny do wspolpracy</span>
+            <h1 class="hero-title">Automatyka & Embedded & Web</h1>
+            <p class="hero-subtitle">
+                Kompleksowe rozwiązania techniczne - od sterowników maszyn,
+                przez programowanie robotów przemysłowych, po aplikacje webowe.
+            </p>
+
+            <div class="hero-tags">
+                <div class="hero-tag" onclick="showTagInfo('embedded')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        <path d="M9 9h6v6H9z"/>
+                    </svg>
+                    STM32 / ESP32
+                    <span class="tag-hint">kliknij</span>
+                </div>
+                <div class="hero-tag" onclick="showTagInfo('robot')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v4m0 14v4m11-11h-4M5 12H1m17.364-6.364l-2.828 2.828M7.464 16.536l-2.828 2.828m0-12.728l2.828 2.828m9.072 9.072l2.828 2.828"/>
+                    </svg>
+                    Roboty Yaskawa
+                    <span class="tag-hint">kliknij</span>
+                </div>
+                <div class="hero-tag" onclick="showTagInfo('web')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                    </svg>
+                    Aplikacje Web
+                    <span class="tag-hint">kliknij</span>
+                </div>
+                <div class="hero-tag" onclick="showTagInfo('battery')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    Baterie Li-Ion
+                    <span class="tag-hint">kliknij</span>
+                </div>
+            </div>
+
+            <!-- Info popup -->
+            <div class="tag-info-overlay" id="tagInfoOverlay" onclick="closeTagInfo()">
+                <div class="tag-info-modal" onclick="event.stopPropagation()">
+                    <button class="tag-info-close" onclick="closeTagInfo()">&times;</button>
+                    <div class="tag-info-content" id="tagInfoContent"></div>
+                </div>
+            </div>
+
+            <div class="hero-cta">
+                <a href="#kontakt" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    Napisz do mnie
+                </a>
+                <a href="#uslugi" class="btn btn-secondary">
+                    Zobacz usługi
+                </a>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICES ==================== -->
+    <section class="section section-dark" id="uslugi">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Usługi</span>
+                <h2 class="section-title">Czym się zajmuję</h2>
+                <p class="section-desc">
+                    Od pomysłu do gotowego produktu. Projektuję, programuję i wdrażam rozwiązania
+                    łączące świat hardware i software.
+                </p>
+            </div>
+
+            <div class="services-grid">
+                <!-- Sterowniki maszyn -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="4" y="4" width="16" height="16" rx="2"/>
+                            <path d="M9 9h6v6H9z"/>
+                            <path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/>
+                        </svg>
+                    </div>
+                    <h3>Sterowniki Maszyn</h3>
+                    <p>
+                        Projektowanie i programowanie dedykowanych sterowników opartych na
+                        mikrokontrolerach. Od schematu po gotowe urządzenie.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">STM32</span>
+                        <span class="service-tag">ESP32</span>
+                        <span class="service-tag">ATtiny</span>
+                        <span class="service-tag">nRF52</span>
+                        <span class="service-tag">PCB</span>
+                    </div>
+                </div>
+
+                <!-- Roboty przemysłowe -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 1v4m0 14v4m-7.071-4.929l2.828-2.828m8.486-8.486l2.828-2.828m-14.142 0l2.828 2.828m8.486 8.486l2.828 2.828M1 12h4m14 0h4"/>
+                        </svg>
+                    </div>
+                    <h3>Automatyzacja Produkcji</h3>
+                    <p>
+                        Programowanie robotów przemysłowych, integracja z liniami produkcyjnymi,
+                        optymalizacja procesów spawalniczych.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">Yaskawa</span>
+                        <span class="service-tag">Spawanie</span>
+                        <span class="service-tag">PLC</span>
+                        <span class="service-tag">HMI</span>
+                    </div>
+                </div>
+
+                <!-- Aplikacje webowe -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                        </svg>
+                    </div>
+                    <h3>Aplikacje Webowe</h3>
+                    <p>
+                        Konfiguratory produktów, panele administracyjne, systemy B2B,
+                        integracje API. Od prostych stron po złożone aplikacje.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">PHP</span>
+                        <span class="service-tag">JavaScript</span>
+                        <span class="service-tag">MySQL</span>
+                        <span class="service-tag">REST API</span>
+                    </div>
+                </div>
+
+                <!-- Regeneracja baterii -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3>Regeneracja Baterii</h3>
+                    <p>
+                        Wymiana ogniw w bateriach do rowerów elektrycznych, hulajnóg,
+                        elektronarzędzi. Ogniwa premium, BMS, testy pojemności.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">Li-Ion</span>
+                        <span class="service-tag">18650</span>
+                        <span class="service-tag">21700</span>
+                        <span class="service-tag">BMS</span>
+                        <span class="service-tag">E-bike</span>
+                    </div>
+                </div>
+
+                <!-- Projektowanie PCB -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="6" width="20" height="12" rx="2"/>
+                            <path d="M6 12h.01M12 12h.01M18 12h.01"/>
+                            <path d="M6 12v-2m0 4v-2m6-2v4m6-4v2m0 2v-2"/>
+                        </svg>
+                    </div>
+                    <h3>Projektowanie PCB</h3>
+                    <p>
+                        Schematy elektroniczne, projekty płytek drukowanych,
+                        prototypy. Od koncepcji po gotową produkcję.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">KiCad</span>
+                        <span class="service-tag">SMD</span>
+                        <span class="service-tag">THT</span>
+                        <span class="service-tag">JLCPCB</span>
+                    </div>
+                </div>
+
+                <!-- Druk 3D -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Druk 3D</h3>
+                    <p>
+                        Prototypy, obudowy, części mechaniczne.
+                        Druk FDM (PLA, PETG, ASA) i żywiczny (SLA) dla precyzyjnych detali.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">FDM</span>
+                        <span class="service-tag">SLA</span>
+                        <span class="service-tag">CAD</span>
+                        <span class="service-tag">Prototypy</span>
+                    </div>
+                </div>
+
+                <!-- Integracja systemów -->
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 6h16M4 12h16M4 18h16"/>
+                            <circle cx="8" cy="6" r="2"/>
+                            <circle cx="16" cy="12" r="2"/>
+                            <circle cx="10" cy="18" r="2"/>
+                        </svg>
+                    </div>
+                    <h3>Integracja Systemów</h3>
+                    <p>
+                        Łączenie aplikacji webowych z produkcją. Synchronizacja baz danych,
+                        komunikacja między systemami, automatyzacja przepływu danych.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">REST API</span>
+                        <span class="service-tag">Webhooks</span>
+                        <span class="service-tag">MQTT</span>
+                        <span class="service-tag">Modbus</span>
+                        <span class="service-tag">OPC-UA</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== TECH STACK ==================== -->
+    <section class="section" id="technologie">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Technologie</span>
+                <h2 class="section-title">Narzędzia i platformy</h2>
+            </div>
+
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="4" y="4" width="16" height="16" rx="2"/>
+                        <path d="M9 9h6v6H9z"/>
+                    </svg>
+                    <span>STM32</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0"/>
+                    </svg>
+                    <span>ESP32</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    <span>nRF52</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                    </svg>
+                    <span>C / C++</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                        <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    </svg>
+                    <span>MySQL</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                    </svg>
+                    <span>PHP</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span>JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                    </svg>
+                    <span>Git</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section class="section section-dark" id="kontakt">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Kontakt</span>
+                <h2 class="section-title">Porozmawiajmy o projekcie</h2>
+                <p class="section-desc">
+                    Masz pomysł na projekt? Potrzebujesz wyceny? Napisz - odpowiadam zwykle w ciągu 24h.
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    <h3>Email</h3>
+                    <a href="mailto:marcixn1@gmail.com">marcixn1@gmail.com</a>
+                </div>
+
+                <div class="contact-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/>
+                    </svg>
+                    <h3>GitHub</h3>
+                    <a href="https://github.com/marcixn1" target="_blank" rel="noopener">github.com/marcixn1</a>
+                </div>
+
+                <div class="contact-card">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <h3>Lokalizacja</h3>
+                    <span style="color: var(--text-secondary); font-size: 14px;">Polska</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <p>&copy; 2024 MarCixn. Automatyka • Embedded • Web</p>
+    </footer>
+
+    <script>
+        const tagInfoData = {
+            embedded: {
+                icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="4" width="16" height="16" rx="2"/>
+                    <path d="M9 9h6v6H9z"/>
+                </svg>`,
+                title: 'Mikrokontrolery STM32 / ESP32',
+                subtitle: 'Mózgi nowoczesnych urządzeń elektronicznych',
+                description: `To małe komputery wielkości znaczka pocztowego, które sterują urządzeniami.
+                    Znajdują się w prawie każdym urządzeniu elektronicznym - od ekspresu do kawy po samochód.
+                    Programuję je, żeby robiły dokładnie to, czego potrzebujesz.`,
+                examples: [
+                    { title: 'Sterownik maszyny produkcyjnej', desc: 'Kontroluje silniki, czujniki, wyświetlacz - cała logika działania maszyny' },
+                    { title: 'System IoT z WiFi/Bluetooth', desc: 'Urządzenie łączące się z internetem, wysyłające dane do aplikacji' },
+                    { title: 'Panel sterowania z ekranem', desc: 'Dotykowy interfejs do obsługi urządzenia przemysłowego' },
+                    { title: 'Czujnik bezprzewodowy', desc: 'Mierzy temperaturę, wilgotność, wibracje - wysyła dane na telefon' },
+                    { title: 'Sterownik oświetlenia LED', desc: 'Programowalne efekty świetlne, ściemnianie, harmonogramy' },
+                ]
+            },
+            robot: {
+                icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12 1v4m0 14v4m11-11h-4M5 12H1m17.364-6.364l-2.828 2.828M7.464 16.536l-2.828 2.828"/>
+                </svg>`,
+                title: 'Roboty Przemysłowe Yaskawa',
+                subtitle: 'Automatyzacja procesów produkcyjnych',
+                description: `Roboty przemysłowe to ramiona mechaniczne, które wykonują powtarzalne zadania
+                    z precyzją nieosiągalną dla człowieka. Programuję je do spawania, malowania,
+                    montażu i innych zadań produkcyjnych.`,
+                examples: [
+                    { title: 'Robot spawalniczy', desc: 'Automatyczne spawanie konstrukcji stalowych - szybciej i dokładniej niż ręcznie' },
+                    { title: 'Paletyzacja', desc: 'Robot układa produkty na paletach - setki sztuk na godzinę, bez przerw' },
+                    { title: 'Obsługa maszyn CNC', desc: 'Podawanie i odbieranie elementów z obrabiarek - ciągła praca 24/7' },
+                    { title: 'Montaż komponentów', desc: 'Precyzyjne składanie elementów z dokładnością do 0.1mm' },
+                    { title: 'Kontrola jakości', desc: 'Robot z kamerą sprawdza produkty i odrzuca wadliwe' },
+                ]
+            },
+            web: {
+                icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
+                </svg>`,
+                title: 'Aplikacje Webowe',
+                subtitle: 'Systemy dostępne z przeglądarki',
+                description: `Tworzę aplikacje działające w przeglądarce internetowej - dostępne z każdego
+                    urządzenia, bez instalacji. Od prostych stron firmowych po złożone systemy
+                    zarządzania produkcją.`,
+                examples: [
+                    { title: 'Konfigurator produktów', desc: 'Klient sam składa produkt z opcji i widzi cenę - jak ten dla drabin ewakuacyjnych' },
+                    { title: 'Panel administracyjny', desc: 'Zarządzanie zamówieniami, klientami, produktami - wszystko w jednym miejscu' },
+                    { title: 'System B2B dla partnerów', desc: 'Hurtownicy składają zamówienia online z własnymi cenami i marżami' },
+                    { title: 'Dashboard produkcyjny', desc: 'Podgląd na żywo stanu maszyn, wydajności, przestojów' },
+                    { title: 'Integracja z magazynem', desc: 'Automatyczna synchronizacja stanów między sklepem a WMS' },
+                ]
+            },
+            battery: {
+                icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>`,
+                title: 'Regeneracja Baterii Li-Ion',
+                subtitle: 'Drugie życie dla akumulatorów',
+                description: `Baterie litowo-jonowe po kilku latach tracą pojemność. Zamiast wyrzucać
+                    całą baterię (często za 1000-3000 zł), wymieniam same ogniwa na nowe.
+                    Bateria działa jak nowa za ułamek ceny.`,
+                examples: [
+                    { title: 'Bateria roweru elektrycznego', desc: 'Wymiana ogniw 18650/21700 - zasięg jak z salonu, cena 40-60% nowej' },
+                    { title: 'Hulajnoga elektryczna', desc: 'Regeneracja lub zwiększenie pojemności - dłuższy zasięg' },
+                    { title: 'Elektronarzędzia', desc: 'Wkrętarki, szlifierki - nowe ogniwa zamiast drogich oryginalnych baterii' },
+                    { title: 'Powerbanki', desc: 'Naprawa lub budowa powerbanków o dużej pojemności' },
+                    { title: 'Baterie niestandardowe', desc: 'Budowa pakietów na zamówienie - dowolny kształt, pojemność, napięcie' },
+                ]
+            }
+        };
+
+        function showTagInfo(type) {
+            const data = tagInfoData[type];
+            if (!data) return;
+
+            const examplesHtml = data.examples.map(ex => `
+                <li>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <div><strong>${ex.title}</strong><br>${ex.desc}</div>
+                </li>
+            `).join('');
+
+            document.getElementById('tagInfoContent').innerHTML = `
+                <div class="tag-info-header">
+                    <div class="tag-info-icon">${data.icon}</div>
+                    <div class="tag-info-title">
+                        <h3>${data.title}</h3>
+                        <p>${data.subtitle}</p>
+                    </div>
+                </div>
+
+                <div class="tag-info-section">
+                    <h4>Co to jest?</h4>
+                    <p>${data.description}</p>
+                </div>
+
+                <div class="tag-info-section">
+                    <h4>Przykłady zastosowań</h4>
+                    <ul class="example-list">
+                        ${examplesHtml}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('tagInfoOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTagInfo() {
+            document.getElementById('tagInfoOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Zamknij na Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeTagInfo();
+        });
+    </script>
+
+</body>
+</html>
