@@ -486,7 +486,7 @@
         /* ==================== SERVICES ==================== */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
             gap: 24px;
         }
 
@@ -585,10 +585,86 @@
             color: var(--accent);
         }
 
+        .service-card {
+            cursor: pointer;
+        }
+
+        .service-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, margin-top 0.4s ease, opacity 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+
+        .service-card.expanded .service-details {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+
+        .service-details-content {
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .service-details h4 {
+            font-size: 13px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .service-details ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .service-details li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .service-details li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .service-expand-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: opacity 0.3s;
+        }
+
+        .service-card.expanded .service-expand-hint {
+            opacity: 0;
+        }
+
+        .service-expand-hint svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s;
+        }
+
+        .service-card.expanded .service-expand-hint svg {
+            transform: rotate(180deg);
+        }
+
         /* ==================== PORTFOLIO ==================== */
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
             gap: 24px;
         }
 
@@ -980,6 +1056,12 @@
             width: 120px;
             height: 120px;
             margin: 0 auto 40px;
+            animation: cubeFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes cubeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
 
         .cube {
@@ -1021,12 +1103,93 @@
         }
 
         /* ==================== RESPONSIVE ==================== */
+        /* TABLET */
+        @media (max-width: 992px) {
+            .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* MOBILE */
         @media (max-width: 768px) {
+            /* Orby mniejsze na mobile */
+            .orb-1 { width: 200px; height: 200px; }
+            .orb-2 { width: 150px; height: 150px; }
+            .orb-3 { width: 100px; height: 100px; }
+
+            /* Hero */
+            .hero-content { padding: 20px 16px; }
+            .hero-badge { font-size: 11px; padding: 6px 12px; }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 0.95rem; margin-bottom: 24px; }
             .hero-tags { gap: 8px; }
-            .hero-tag { padding: 8px 14px; font-size: 13px; }
-            .services-grid, .portfolio-grid { grid-template-columns: 1fr; }
-            .section { padding: 60px 20px; }
-            .tech-tooltip { display: none; }
+            .hero-tag { padding: 8px 12px; font-size: 12px; }
+            .hero-tag svg { width: 14px; height: 14px; }
+
+            /* Cube mniejszy */
+            .cube-container { width: 80px; height: 80px; margin-bottom: 30px; }
+            .cube-face { width: 80px; height: 80px; }
+            .cube-face svg { width: 28px; height: 28px; }
+            .cube-face.front { transform: translateZ(40px); }
+            .cube-face.back { transform: rotateY(180deg) translateZ(40px); }
+            .cube-face.right { transform: rotateY(90deg) translateZ(40px); }
+            .cube-face.left { transform: rotateY(-90deg) translateZ(40px); }
+            .cube-face.top { transform: rotateX(90deg) translateZ(40px); }
+            .cube-face.bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+            /* Sekcje */
+            .section { padding: 40px 16px; }
+            .section-title { font-size: 1.5rem; }
+            .section-desc { font-size: 0.9rem; }
+
+            /* Grid 1 kolumna */
+            .services-grid, .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
+
+            /* Portfolio karty */
+            .portfolio-image { height: 160px; }
+            .portfolio-content { padding: 16px; }
+            .portfolio-content h3 { font-size: 1rem; }
+            .portfolio-content p { font-size: 13px; }
+            .portfolio-tech { gap: 6px; }
+            .portfolio-tech span { font-size: 10px; padding: 3px 8px; }
+
+            /* Service karty */
+            .service-card { padding: 20px; }
+            .service-icon { width: 48px; height: 48px; }
+            .service-icon svg { width: 22px; height: 22px; }
+
+            /* Tech grid */
+            .tech-grid { grid-template-columns: repeat(3, 1fr); gap: 12px; }
+            .tech-item { padding: 12px 8px; font-size: 11px; cursor: pointer; }
+            .tech-item svg { width: 20px; height: 20px; }
+
+            /* Tooltip na mobile - pokazuj po kliknieciu */
+            .tech-item:hover .tech-tooltip { opacity: 0; visibility: hidden; }
+            .tech-item.tooltip-active .tech-tooltip {
+                opacity: 1 !important;
+                visibility: visible !important;
+                display: block !important;
+            }
+            .tech-tooltip {
+                width: max-content;
+                max-width: 200px;
+                font-size: 11px;
+            }
+
+            /* Footer */
+            .footer { padding: 30px 16px; }
+            .footer-signature { font-size: 0.85rem; }
+
+            /* CTA */
+            .cta-section { padding: 40px 20px; }
+            .cta-title { font-size: 1.3rem; }
+        }
+
+        /* SMALL MOBILE */
+        @media (max-width: 400px) {
+            .hero-title { font-size: 1.7rem; }
+            .hero-tags { gap: 6px; }
+            .hero-tag { padding: 6px 10px; font-size: 11px; gap: 4px; }
+            .tech-grid { grid-template-columns: repeat(2, 1fr); }
+            .portfolio-tech span { font-size: 9px; }
         }
     </style>
 </head>
@@ -1295,6 +1458,22 @@
                         <span class="service-tag">nRF52</span>
                         <span class="service-tag">PCB</span>
                     </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Sterowniki silnikow krokowych i serwo</li>
+                                <li>Systemy pomiarowe z czujnikami</li>
+                                <li>Komunikacja RS485, CAN, Modbus</li>
+                                <li>Wyswietlacze HMI i panele operatorskie</li>
+                                <li>Programowanie w C/C++ i FreeRTOS</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
+                    </div>
                 </div>
 
                 <div class="service-card">
@@ -1309,6 +1488,22 @@
                         <span class="service-tag">Yaskawa</span>
                         <span class="service-tag">Spawanie</span>
                         <span class="service-tag">HMI</span>
+                    </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Programowanie robotow Yaskawa Motoman</li>
+                                <li>Stanowiska spawalnicze zrobotyzowane</li>
+                                <li>Integracja z ukladami sterowania</li>
+                                <li>Optymalizacja cykli produkcyjnych</li>
+                                <li>Obsluga i diagnostyka robotow</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
                     </div>
                 </div>
 
@@ -1326,6 +1521,22 @@
                         <span class="service-tag">MySQL</span>
                         <span class="service-tag">REST API</span>
                     </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Konfiguratory produktow z kalkulacja cen</li>
+                                <li>Panele administracyjne i dashboardy</li>
+                                <li>Systemy B2B z marzami dla sprzedawcow</li>
+                                <li>Integracje API i webhooki</li>
+                                <li>Generowanie PDF i raportow</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
+                    </div>
                 </div>
 
                 <div class="service-card">
@@ -1342,6 +1553,22 @@
                         <span class="service-tag">BMS</span>
                         <span class="service-tag">E-bike</span>
                     </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Wymiana ogniw 18650 na 21700</li>
+                                <li>Budowa pakietow od zera (np. 20S 26P)</li>
+                                <li>Dobor i wymiana BMS</li>
+                                <li>Testy pojemnosci i diagnostyka</li>
+                                <li>Baterie do e-bike, hulajnog, powerbank</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
+                    </div>
                 </div>
 
                 <div class="service-card">
@@ -1353,9 +1580,25 @@
                     <h3>Projektowanie PCB</h3>
                     <p>Schematy elektroniczne, projekty plytek drukowanych, prototypy.</p>
                     <div class="service-tags">
-                        <span class="service-tag">KiCad</span>
+                        <span class="service-tag">EasyEDA</span>
                         <span class="service-tag">SMD</span>
                         <span class="service-tag">JLCPCB</span>
+                    </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Schematy ideowe w EasyEDA</li>
+                                <li>Projekty PCB jedno- i wielowarstwowe</li>
+                                <li>Montaz SMD i THT</li>
+                                <li>Zamowienia w JLCPCB/PCBWay</li>
+                                <li>Prototypy i male serie</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
                     </div>
                 </div>
 
@@ -1371,6 +1614,22 @@
                         <span class="service-tag">FDM</span>
                         <span class="service-tag">SLA</span>
                         <span class="service-tag">CAD</span>
+                    </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge zrobic:</h4>
+                            <ul>
+                                <li>Modelowanie 3D (podstawy CAD)</li>
+                                <li>Druk FDM (PLA, PETG, ABS, TPU)</li>
+                                <li>Druk zywiczny SLA (detale)</li>
+                                <li>Obudowy do elektroniki</li>
+                                <li>Prototypy mechaniczne</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
                     </div>
                 </div>
             </div>
@@ -1565,6 +1824,49 @@
         }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
         document.querySelectorAll('.service-card, .tech-item, .portfolio-card').forEach(el => observer.observe(el));
+
+        // ==================== SERVICE CARD EXPAND ====================
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Zamknij inne karty
+                document.querySelectorAll('.service-card.expanded').forEach(other => {
+                    if (other !== this) {
+                        other.classList.remove('expanded');
+                    }
+                });
+                // Toggle ta karta
+                this.classList.toggle('expanded');
+            });
+        });
+
+        // ==================== MOBILE TOOLTIP CLICK ====================
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        if (isTouchDevice) {
+            document.querySelectorAll('.tech-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const wasActive = this.classList.contains('tooltip-active');
+
+                    // Zamknij wszystkie inne
+                    document.querySelectorAll('.tech-item.tooltip-active').forEach(el => {
+                        el.classList.remove('tooltip-active');
+                    });
+
+                    // Toggle aktualny
+                    if (!wasActive) {
+                        this.classList.add('tooltip-active');
+                    }
+                });
+            });
+
+            // Klik poza zamyka tooltip
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.tech-item.tooltip-active').forEach(el => {
+                    el.classList.remove('tooltip-active');
+                });
+            });
+        }
 
         // ==================== TAG INFO MODAL ====================
         const tagInfoData = {
