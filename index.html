@@ -511,6 +511,26 @@
             margin-top: 32px;
         }
 
+        .about-video {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .about-video video {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .about-video-caption {
+            display: block;
+            margin-top: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
         /* ==================== SERVICES ==================== */
         .services-grid {
             display: grid;
@@ -2123,7 +2143,14 @@
                 <div class="about-text">
                     <p>Mam 23 lata. Skończyłem informatyka, ale codziennie pracuję jako ślusarz-spawacz - stąd "Welder" w nazwie. A "Code"? Bo hobbystycznie, a coraz częściej zarobkowo, klepię kod i embedded.</p>
 
-                    <p>Zaczęło się w technikum. Próbowałem odwzorować robota Spot od Boston Dynamics - oczywiście uboższa wersja, ale działająca. Wtedy złapałem bakcyla. Programować uczyłem się zanim w szkole do tego doszli. Doszło nawet do tego, że poprawiałem kod po nauczycielach.</p>
+                    <p>Zaczęło się w technikum od robota-pająka, który upadał i wstawał. Potem próbowałem odwzorować robota Spot od Boston Dynamics - oczywiście uboższa wersja, ale działająca. Wtedy złapałem bakcyla. Programować uczyłem się zanim w szkole do tego doszli. Doszło nawet do tego, że poprawiałem kod po nauczycielach.</p>
+
+                    <div class="about-video">
+                        <video autoplay loop muted playsinline>
+                            <source src="img/robot-pająk-wstawanie.mp4" type="video/mp4">
+                        </video>
+                        <span class="about-video-caption">Robot-pająk z technikum - jeden z pierwszych projektów</span>
+                    </div>
 
                     <p>Teraz? Łączę kabelki żeby sprawdzić czy wybuchnę. Serio - embedded to dla mnie plac zabaw. Buduję rzeczy od zera, uczę się ciągle czegoś nowego. Specjalizuję się w trudnych rzeczach, chociaż z matmy miałem dwóję. Znajomi ze studiów przychodzą po porady, bo w zasadzie nic innego nie robię niż tworzę projekty.</p>
 
