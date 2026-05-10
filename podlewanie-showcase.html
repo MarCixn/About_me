@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automatyczne Podlewanie IoT - Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #030712;
+            --bg-card: rgba(30, 41, 59, 0.5);
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: rgba(71, 85, 105, 0.5);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 24px;
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo svg { width: 28px; height: 28px; color: var(--accent); }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 24px 60px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header > p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 24px;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            padding: 8px 16px;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--accent);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+            padding: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .feature svg {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .feature span {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        @media (max-width: 400px) {
+            .gallery { grid-template-columns: 1fr; }
+        }
+
+        .gallery-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item-caption {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .gallery-item-caption h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            max-width: 800px;
+            margin: 40px auto 30px;
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .description h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .description p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .description p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .description strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            font-size: 12px;
+            color: #fbbf24;
+            margin-top: 8px;
+        }
+
+        footer {
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        footer a { color: var(--accent); text-decoration: none; }
+
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .lightbox.active { opacity: 1; visibility: visible; }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover { background: var(--accent); }
+        .lightbox-close svg { width: 24px; height: 24px; }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+                </svg>
+                CodeWelder
+            </a>
+            <a href="index.html#kontakt" class="nav-btn">Kontakt</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Automatyczne Podlewanie IoT</h1>
+            <p>Recznie robiona drewniana doniczka z 5 miejscami na rosliny, zbiornikiem 10L i pelna automatyka. Uniwersalny kod - dziala rowniez w ogrodzie.</p>
+
+            <div class="tags">
+                <span class="tag">ESP32</span>
+                <span class="tag">WiFi</span>
+                <span class="tag">Zasilanie bateryjne</span>
+                <span class="tag">Panel WWW</span>
+                <span class="tag">Komunikaty glosowe</span>
+                <span class="tag">Auto-diagnostyka</span>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>5 zaworow do rozlewania wody</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Przepływomierz - kontrola ilosci wody</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Czujniki wilgotnosci gleby</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Przypomnienia i komunikaty glosowe</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Auto wykrywanie bledow (brak wody/przeplywu/czujnika)</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Konfiguracja przez strone WWW</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Pelny tryb debug</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Uniwersalny kod - dziala w ogrodzie</span>
+                </div>
+                <div class="feature">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Zasilanie bateryjne - pelna autonomia</span>
+                </div>
+            </div>
+
+            <div class="description">
+                <h2>O projekcie</h2>
+                <p>Projekt zrodzil sie z potrzeby automatyzacji podlewania roslin domowych podczas dluższych nieobecnosci. Zamiast kupowac gotowe rozwiazanie, postanowilem zbudowac cos wlasnego - od podstaw, lacznie z drewniana obudowa.</p>
+
+                <p>Sercem systemu jest mikrokontroler <strong>ESP32</strong>, ktory steruje piecioma zaworami elektromagnetycznymi. Kazda roslina moze miec indywidualnie ustawiony harmonogram podlewania - ilosc wody, czestotliwosc, godziny. Przepływomierz pozwala dokladnie kontrolowac ile wody trafia do kazdej doniczki.</p>
+
+                <p>System posiada wbudowane <strong>czujniki wilgotnosci gleby</strong> - mozna ustawic podlewanie warunkowe, ktore uruchomi sie tylko gdy gleba jest zbyt sucha. To oszczedza wode i chroni rosliny przed przelaniem.</p>
+
+                <p><strong>Komunikaty glosowe</strong> to funkcja, ktora informuje o stanie systemu - przypomina o uzupelnieniu zbiornika, ostrzega o wykrytych bledach, potwierdza wykonanie podlewania. Mozna je wlaczyc lub wylaczyc w panelu konfiguracyjnym.</p>
+
+                <p>Caly system konfiguruje sie przez <strong>panel webowy</strong> dostepny w sieci lokalnej. Mozna tam ustawic harmonogramy, progi wilgotnosci, glosnosc komunikatow, a takze przegladac dziennik zdarzen i bledow. Tryb debug pozwala na szczegolowa diagnostyke w razie problemow.</p>
+
+                <p>Caly system dziala na <strong>zasilaniu bateryjnym</strong>, co czyni go w pelni autonomicznym. Nie wymaga stalego podlaczenia do sieci - wystarczy naladowac akumulator i urzadzenie moze pracowac przez dlugi czas bez nadzoru.</p>
+
+                <p>Kod napisalem tak, by byl <strong>uniwersalny</strong> - ta sama logika moze sterowac podlewaniem w ogrodzie, szklarni czy na balkonie. Wystarczy podlaczyc odpowiednia liczbe zaworow i czujnikow.</p>
+            </div>
+
+            <span class="status">Projekt w trakcie realizacji</span>
+        </div>
+
+        <div class="gallery">
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka final.jpg" alt="Doniczka final">
+                <div class="gallery-item-caption"><h3>Doniczka - wersja finalna</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka0final.jpg" alt="Doniczka final 2">
+                <div class="gallery-item-caption"><h3>Doniczka finalna - widok</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-final-z-bliska.jpg" alt="Doniczka z bliska">
+                <div class="gallery-item-caption"><h3>Doniczka finalna - z bliska</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-final-brzydsze.jpg" alt="Doniczka inny kadr">
+                <div class="gallery-item-caption"><h3>Doniczka finalna - inny kadr</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-proces.jpg" alt="Proces budowy">
+                <div class="gallery-item-caption"><h3>Proces budowy</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-niepomalowana.jpg" alt="Niepomalowana">
+                <div class="gallery-item-caption"><h3>Doniczka niepomalowana</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-niepomalowana1.jpg" alt="Niepomalowana 2">
+                <div class="gallery-item-caption"><h3>Niepomalowana - widok 2</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/doniczka-niepomalowana-inny-kadr.jpg" alt="Niepomalowana inny kadr">
+                <div class="gallery-item-caption"><h3>Niepomalowana - inny kadr</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/pcb.jpg" alt="PCB">
+                <div class="gallery-item-caption"><h3>Plytka PCB</h3></div>
+            </div>
+            <div class="gallery-item" onclick="openLightbox(this)">
+                <img src="img/pcb (2).jpg" alt="PCB 2">
+                <div class="gallery-item-caption"><h3>PCB - widok 2</h3></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Stworzone przez <a href="index.html">CodeWelder</a></p>
+    </footer>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+        <img src="" alt="Powiekszenie" id="lightbox-img">
+    </div>
+
+    <script>
+        function openLightbox(el) {
+            document.getElementById('lightbox-img').src = el.querySelector('img').src;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    </script>
+</body>
+</html>

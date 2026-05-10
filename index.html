@@ -689,6 +689,19 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
+        .portfolio-card[data-showcase] {
+            cursor: pointer;
+        }
+
+        .portfolio-card[data-showcase] .portfolio-content h3,
+        .portfolio-card[data-showcase] .portfolio-content > p {
+            transition: color 0.3s;
+        }
+
+        .portfolio-card[data-showcase]:hover .portfolio-content h3 {
+            color: var(--accent);
+        }
+
         .portfolio-image {
             height: 200px;
             background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
@@ -805,6 +818,121 @@
         .portfolio-link svg {
             width: 16px;
             height: 16px;
+        }
+
+        /* Portfolio Image Slider */
+        .portfolio-slider {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .portfolio-slider-container {
+            display: flex;
+            transition: transform 0.4s ease;
+            height: 100%;
+        }
+
+        .portfolio-slider-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+
+        .portfolio-slider-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .portfolio-slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s, background 0.3s;
+            z-index: 10;
+        }
+
+        .portfolio-image:hover .portfolio-slider-btn {
+            opacity: 1;
+        }
+
+        .portfolio-slider-btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .portfolio-slider-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .portfolio-slider-prev {
+            left: 8px;
+        }
+
+        .portfolio-slider-next {
+            right: 8px;
+        }
+
+        .portfolio-slider-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .portfolio-slider-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .portfolio-slider-dot.active {
+            background: var(--accent);
+        }
+
+        .portfolio-slider-dot:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Featured portfolio card */
+        .portfolio-card.featured {
+            grid-column: 1 / -1;
+        }
+
+        @media (min-width: 768px) {
+            .portfolio-card.featured {
+                display: grid;
+                grid-template-columns: 1.2fr 1fr;
+            }
+
+            .portfolio-card.featured .portfolio-image {
+                height: auto;
+                min-height: 300px;
+            }
+
+            .portfolio-card.featured .portfolio-content {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
         }
 
         /* ==================== TECH STACK ==================== */
@@ -1314,59 +1442,115 @@
 
             <div class="portfolio-grid">
 
-                <!-- PROJEKT 0: Konfigurator studni 3D -->
-                <div class="portfolio-card">
+                <!-- PROJEKT WYROZNIANY: Konfigurator Drabin 3D -->
+                <div class="portfolio-card featured" data-showcase="drabiny3d-showcase.html">
                     <div class="portfolio-image">
                         <span class="portfolio-category">Web 3D</span>
-                        <div class="portfolio-image-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <circle cx="12" cy="12" r="10"/><ellipse cx="12" cy="12" rx="10" ry="4"/><line x1="12" y1="2" x2="12" y2="22"/>
-                            </svg>
-                            Konfigurator studni
+                        <div class="portfolio-slider" data-slider>
+                            <div class="portfolio-slider-container">
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/drabina-z-podestem-koszem-ociepleniem-okapem-nad-ziemia.PNG" alt="Drabina z podestem, koszem, ociepleniem i okapem">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/drabina-z-przełazem-z-koszem-bigfoot.PNG" alt="Drabina z przełazem strychowym i koszem BigFoot">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/drabina-z-podestem-koszem-i-przeszkoda.PNG" alt="Drabina z podestem, koszem i przeszkodą">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/klasyczna-z-koszem.PNG" alt="Klasyczna drabina z koszem ochronnym">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/drabina-z-podestem-z-koszem.PNG" alt="Drabina z podestem i koszem">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/drabina-z-podestem-bez-kosza.PNG" alt="Drabina z podestem bez kosza">
+                                </div>
+                            </div>
+                            <button class="portfolio-slider-btn portfolio-slider-prev">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <button class="portfolio-slider-btn portfolio-slider-next">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
+                            <div class="portfolio-slider-dots"></div>
+                        </div>
+                    </div>
+                    <div class="portfolio-content">
+                        <h3>Konfigurator Drabin Ewakuacyjnych 3D</h3>
+                        <p>Zaawansowany konfigurator drabin ewakuacyjnych z pelna wizualizacja 3D w czasie rzeczywistym. Obsluguje trzy schematy montazu: klasyczna, z podestem i z przejsciem przez strop. Konfiguracja kosza ochronnego, wspornikow, przeszkod, ocieplenia i wielu innych parametrow. Model 3D aktualizuje sie natychmiast przy kazdej zmianie.</p>
+                        <div class="portfolio-tech">
+                            <span>Vue.js 3</span>
+                            <span>Three.js</span>
+                            <span>WebGL</span>
+                            <span>TypeScript</span>
+                            <span>Composition API</span>
+                        </div>
+                        <div class="portfolio-links">
+                            <a href="https://drabiny3d.codewelder.pl" target="_blank" class="portfolio-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                                Demo
+                            </a>
+                            <a href="drabiny3d-showcase.html" target="_blank" class="portfolio-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                Showcase
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJEKT 0: Konfigurator studni 3D -->
+                <div class="portfolio-card" data-showcase="https://studnie.codewelder.pl/showcase.html">
+                    <div class="portfolio-image">
+                        <span class="portfolio-category">Web 3D</span>
+                        <div class="portfolio-slider" data-slider>
+                            <div class="portfolio-slider-container">
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/strona-startowa.PNG" alt="Konfigurator studni - strona startowa">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/studnia-od-gory.PNG" alt="Widok studni z gory">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/kolizja_muf.PNG" alt="Wykrywanie kolizji muf">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/karta technologiczna.PNG" alt="Eksport karty technologicznej PDF">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/Dodawanie własnych typów muf.PNG" alt="Dodawanie wlasnych typow muf">
+                                </div>
+                                <div class="portfolio-slider-slide">
+                                    <img src="img/Ustawienia_konfiguratora.PNG" alt="Ustawienia konfiguratora">
+                                </div>
+                            </div>
+                            <button class="portfolio-slider-btn portfolio-slider-prev">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                            </button>
+                            <button class="portfolio-slider-btn portfolio-slider-next">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                            </button>
+                            <div class="portfolio-slider-dots"></div>
                         </div>
                     </div>
                     <div class="portfolio-content">
                         <h3>Konfigurator Studni 3D</h3>
-                        <p>Interaktywny konfigurator studni betonowych z wizualizacja 3D, wykrywaniem kolizji muf, narzedzami pomiarowymi i eksportem karty technologicznej PDF.</p>
+                        <p>Interaktywne narzedzie dla prefabrykatu betonowego. Wizualizacja 3D studni w czasie rzeczywistym, konfiguracja muf (DN110-DN200) z ustawieniem kata i wysokosci, automatyczne wykrywanie kolizji, narzedzia pomiarowe 3D oraz eksport karty technologicznej PDF z widokiem z gory i lista muf.</p>
                         <div class="portfolio-tech">
-                            <span>Vue.js</span>
+                            <span>Vue.js 3</span>
                             <span>Three.js</span>
                             <span>WebGL</span>
                             <span>jsPDF</span>
+                            <span>Vite</span>
                         </div>
                         <div class="portfolio-links">
                             <a href="https://studnie.codewelder.pl" target="_blank" class="portfolio-link">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
                                 Demo
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PROJEKT 1: Konfigurator drabin -->
-                <div class="portfolio-card">
-                    <div class="portfolio-image">
-                        <span class="portfolio-category">Web App</span>
-                        <div class="portfolio-image-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/>
-                            </svg>
-                            Konfigurator drabin
-                        </div>
-                    </div>
-                    <div class="portfolio-content">
-                        <h3>Konfigurator Drabin Ewakuacyjnych</h3>
-                        <p>Zaawansowany konfigurator produktow z kalkulacja cen, systemem B2B dla sprzedawcow, generowaniem PDF i panelem administracyjnym.</p>
-                        <div class="portfolio-tech">
-                            <span>PHP</span>
-                            <span>JavaScript</span>
-                            <span>MySQL</span>
-                            <span>REST API</span>
-                        </div>
-                        <div class="portfolio-links">
-                            <a href="https://drabiny.codewelder.pl" target="_blank" class="portfolio-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-                                Demo
+                            <a href="https://studnie.codewelder.pl/showcase.html" target="_blank" class="portfolio-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                Showcase
                             </a>
                         </div>
                     </div>
@@ -1402,58 +1586,48 @@
                 </div>
 
                 <!-- PROJEKT 3: Automatyczne podlewanie -->
-                <div class="portfolio-card">
+                <div class="portfolio-card" data-showcase="podlewanie-showcase.html">
                     <div class="portfolio-image">
                         <span class="portfolio-category">IoT</span>
-                        <div class="portfolio-image-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.14 0"/>
-                            </svg>
-                            Smart Garden
-                        </div>
+                        <img src="img/doniczka final.jpg" alt="Automatyczne podlewanie IoT" style="width:100%;height:100%;object-fit:cover;">
                     </div>
                     <div class="portfolio-content">
-                        <h3>Automatyczne Podlewanie Roslin</h3>
-                        <p>Inteligentny system podlewania z przypomnieniami glosowymi. Konfiguracja przez WiFi, panel webowy z logowaniem i pelnym dziennikiem bledow.</p>
+                        <h3>Automatyczne Podlewanie IoT</h3>
+                        <p>Recznie robiona drewniana doniczka z 5 zaworami, zbiornikiem 10L i pelna automatyka. Przepływomierz, czujniki wilgotnosci, komunikaty glosowe, auto-diagnostyka. Uniwersalny kod - dziala rowniez w ogrodzie.</p>
                         <div class="portfolio-tech">
                             <span>ESP32</span>
                             <span>WiFi</span>
-                            <span>Web UI</span>
+                            <span>Panel WWW</span>
                             <span>Audio</span>
                         </div>
                         <div class="portfolio-links">
-                            <a href="#" class="portfolio-link portfolio-link-soon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                Wkrotce wiecej
+                            <a href="podlewanie-showcase.html" class="portfolio-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                Galeria
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- PROJEKT 4: Budowa baterii -->
-                <div class="portfolio-card">
+                <div class="portfolio-card" data-showcase="bateria-showcase.html">
                     <div class="portfolio-image">
                         <span class="portfolio-category">Baterie</span>
-                        <div class="portfolio-image-placeholder">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                            </svg>
-                            Budowa baterii
-                        </div>
+                        <img src="img/rower-gotowy.jpg" alt="Rower z wlasna bateria" style="width:100%;height:100%;object-fit:cover;">
                     </div>
                     <div class="portfolio-content">
                         <h3>Budowa Baterii E-bike</h3>
-                        <p>Projektowanie i budowa pakietow akumulatorow. Zrealizowany projekt 20S 26P do duzego e-bike. Wykonuje rowniez mniejsze konfiguracje na zamowienie.</p>
+                        <p>Pakiet 20S 26P z 520 ogniw 21700. Termowizja, LCR do rezystancji paskow, tester rezystancji wewnetrznej ogniw, wlasne narzedzia - obciazenie do 5,3kW. Smart BMS.</p>
                         <div class="portfolio-tech">
-                            <span>Li-Ion</span>
-                            <span>21700</span>
-                            <span>BMS</span>
-                            <span>Spawanie</span>
+                            <span>Li-Ion 21700</span>
+                            <span>520 ogniw</span>
+                            <span>Smart BMS</span>
+                            <span>Termowizja</span>
                         </div>
                         <div class="portfolio-links">
-                            <a href="#" class="portfolio-link portfolio-link-soon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                Wkrotce wiecej
+                            <a href="bateria-showcase.html" target="_blank" class="portfolio-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                                Galeria
                             </a>
                         </div>
                     </div>
@@ -1661,6 +1835,70 @@
                         Kliknij po wiecej
                     </div>
                 </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+                        </svg>
+                    </div>
+                    <h3>Diagnostyka Baterii</h3>
+                    <p>Profesjonalny sprzet pomiarowy do testow pakietow Li-Ion i ogniw.</p>
+                    <div class="service-tags">
+                        <span class="service-tag">LCR</span>
+                        <span class="service-tag">5,3kW</span>
+                        <span class="service-tag">IR Tester</span>
+                    </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Moj sprzet:</h4>
+                            <ul>
+                                <li>LCR - pomiar rezystancji paskow i zgrzewow</li>
+                                <li>Tester rezystancji wewnetrznej ogniw</li>
+                                <li>Obciazenie do 5,3kW - testy pod pelnym pradem</li>
+                                <li>Wlasne autorskie narzedzia pomiarowe</li>
+                                <li>Selekcja i parowanie ogniw</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
+                    </div>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <path d="M8 21h8M12 17v4"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Termowizja</h3>
+                    <p>Kamera termowizyjna do diagnostyki i kontroli jakosci.</p>
+                    <div class="service-tags">
+                        <span class="service-tag">Diagnostyka</span>
+                        <span class="service-tag">Kontrola</span>
+                        <span class="service-tag">Pomiary</span>
+                    </div>
+                    <div class="service-details">
+                        <div class="service-details-content">
+                            <h4>Co moge sprawdzic:</h4>
+                            <ul>
+                                <li>Jakosc zgrzewow i polaczen elektrycznych</li>
+                                <li>Przegrzewajace sie elementy</li>
+                                <li>Wadliwe polaczenia w instalacjach</li>
+                                <li>Mostki termiczne w budynkach</li>
+                                <li>Kontrola pracy urzadzen pod obciazeniem</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-expand-hint">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                        Kliknij po wiecej
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -1714,6 +1952,46 @@
                     <div class="tech-tooltip"><h5>Git</h5><p>Kontrola wersji, wspolpraca, historia zmian</p></div>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
                     <span>Git</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>Vue.js 3</h5><p>Konfiguratory produktow, interaktywne interfejsy, SPA</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                    <span>Vue.js 3</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>Three.js</h5><p>Wizualizacje 3D, WebGL, konfiguratory z podgladem</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polygon points="12 6 14 10 18 10 15 13 16 17 12 15 8 17 9 13 6 10 10 10 12 6"/></svg>
+                    <span>Three.js</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>TypeScript</h5><p>Typowany JavaScript, lepsza jakosc kodu, mniej bledow</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v8M8 12h8"/></svg>
+                    <span>TypeScript</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>Termowizja</h5><p>Kontrola jakosci zgrzewow, diagnostyka polaczen, wykrywanie usterek</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8 21h8M12 17v4"/></svg>
+                    <span>Termowizja</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>Zgrzewarka</h5><p>Zgrzewanie punktowe pakietow Li-Ion, tasma niklowa</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <span>Zgrzewarka</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>EasyEDA</h5><p>Projektowanie PCB, schematy, zamowienia w JLCPCB</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h.01M12 12h.01M18 12h.01"/></svg>
+                    <span>EasyEDA</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>Yaskawa</h5><p>Roboty przemyslowe, spawanie zrobotyzowane, paletyzacja</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4m0 14v4m11-11h-4M5 12H1"/><path d="M17.66 6.34l-2.83 2.83m-5.66 5.66l-2.83 2.83m11.32 0l-2.83-2.83M6.34 6.34l2.83 2.83"/></svg>
+                    <span>Yaskawa</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-tooltip"><h5>FreeRTOS</h5><p>System czasu rzeczywistego, wielozadaniowosc, sterowniki</p></div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    <span>FreeRTOS</span>
                 </div>
             </div>
         </div>
@@ -1971,6 +2249,61 @@
         }
 
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTagInfo(); });
+
+        // ==================== PORTFOLIO SLIDER ====================
+        document.querySelectorAll('[data-slider]').forEach(slider => {
+            const container = slider.querySelector('.portfolio-slider-container');
+            const slides = slider.querySelectorAll('.portfolio-slider-slide');
+            const prevBtn = slider.querySelector('.portfolio-slider-prev');
+            const nextBtn = slider.querySelector('.portfolio-slider-next');
+            const dotsContainer = slider.querySelector('.portfolio-slider-dots');
+
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            // Create dots
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'portfolio-slider-dot' + (i === 0 ? ' active' : '');
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            }
+
+            const dots = dotsContainer.querySelectorAll('.portfolio-slider-dot');
+
+            function goToSlide(index) {
+                currentSlide = index;
+                if (currentSlide < 0) currentSlide = totalSlides - 1;
+                if (currentSlide >= totalSlides) currentSlide = 0;
+                container.style.transform = `translateX(-${currentSlide * 100}%)`;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === currentSlide));
+            }
+
+            prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+            // Auto-advance every 5 seconds
+            let autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
+
+            slider.addEventListener('mouseenter', () => clearInterval(autoSlide));
+            slider.addEventListener('mouseleave', () => {
+                autoSlide = setInterval(() => goToSlide(currentSlide + 1), 5000);
+            });
+        });
+
+        // Portfolio card click to showcase
+        document.querySelectorAll('.portfolio-card[data-showcase]').forEach(card => {
+            card.addEventListener('click', (e) => {
+                // Ignore clicks on buttons, links, and slider controls
+                if (e.target.closest('a, button, .portfolio-slider-btn, .portfolio-slider-dot, .portfolio-links')) {
+                    return;
+                }
+                const showcaseUrl = card.dataset.showcase;
+                if (showcaseUrl) {
+                    window.open(showcaseUrl, '_blank');
+                }
+            });
+        });
     </script>
 </body>
 </html>
